@@ -1,0 +1,41 @@
+<!-- core/templates/core/editor.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code Editor</title>
+    <style type="text/css" media="screen">
+        #editor { 
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Code Editor</h2>
+    <div id="editor">print("Hello, World!")</div>
+    <button onclick="runCode()">Run</button>
+    <pre id="output"></pre>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        function runCode() {
+            var code = editor.getValue();
+            fetch('/run_code/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').textContent = data.output;
+            });
+        }
+    </script>
+</body>
+</html>

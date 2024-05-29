@@ -24,9 +24,9 @@ SECRET_KEY = "django-insecure-^o_0tn=l20bcu(us@)1=w$0xzs_j=uo09q*-pu&q+zk^!d_)f8
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+AUTH_USER_MODEL = 'yasha.User'
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "yasha"
 ]
 
 MIDDLEWARE = [
