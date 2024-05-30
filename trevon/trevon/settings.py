@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "yasha"
+    "yasha",
 ]
 
 MIDDLEWARE = [
@@ -75,9 +75,13 @@ WSGI_APPLICATION = "trevon.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'users',  # The name of your database
+        'USER': 'root',  # Your MySQL username
+        'PASSWORD': '',  # Your MySQL password (empty string for default)
+        'HOST': 'localhost',  # Set to 'localhost' or '127.0.0.1'
+        'PORT': '3306',  # Default MySQL port
     }
 }
 
