@@ -31,3 +31,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+# accounts/views.py
+
+from django.shortcuts import render
+from .firebase_utils import get_firestore_data, set_firestore_data, update_firestore_data, delete_firestore_data
+
+def index(request):
+    if request.method == 'POST':
+        data = request.POST.get('data')
+        set_firestore_data('your-collection', 'your-document', {'data': data})
+    
+    data_from_firestore = get_firestore_data('your-collection', 'your-document')
+    return render(request, 'index.html', {'data': data_from_firestore})

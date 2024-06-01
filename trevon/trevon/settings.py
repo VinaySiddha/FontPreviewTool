@@ -11,10 +11,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+# settings.py
+
+import os
+import firebase_admin
+from firebase_admin import credentials
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Firebase configuration
+FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, '/workspaces/mini-project/trevon/accounts/credentials.json')
+
+# Initialize Firebase
+cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+firebase_admin.initialize_app(cred)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -24,9 +38,11 @@ SECRET_KEY = "django-insecure-^o_0tn=l20bcu(us@)1=w$0xzs_j=uo09q*-pu&q+zk^!d_)f8
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-AUTH_USER_MODEL = 'yasha.User'
 
 ALLOWED_HOSTS = []
+
+# Custom user model
+AUTH_USER_MODEL = 'yasha.User'
 
 # Application definition
 
@@ -38,7 +54,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "yasha",
-    "accounts",
+    "accounts"
 ]
 
 MIDDLEWARE = [
@@ -56,7 +72,9 @@ ROOT_URLCONF = "trevon.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -71,21 +89,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "trevon.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'users',  # The name of your database
-        'USER': 'root',  # Your MySQL username
-        'PASSWORD': '',  # Your MySQL password (empty string for default)
-        'HOST': 'localhost',  # Set to 'localhost' or '127.0.0.1'
-        'PORT': '3306',  # Default MySQL port
+        'NAME': 'https://yasha-de784.firebaseio.com/',  # Your Firebase Realtime Database URL
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -105,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -116,7 +127,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
