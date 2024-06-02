@@ -60,19 +60,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'trevon.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'admin',
-        'ENFORCE_SCHEMA': False,
+        'NAME': 'user',
         'CLIENT': {
-            'host': 'mongodb+srv://admin:root@yasha.iutjjwd.mongodb.net/?retryWrites=true&w=majority&appName=Yasha',
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
+            'host': 'mongodb+srv://admin:root@yasha.iutjjwd.mongodb.net/test?retryWrites=true&w=majority',
+            'tls': True,
+            'tlsAllowInvalidCertificates': True  # If you are using self-signed certificates or need to bypass validation
         }
     }
 }
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
