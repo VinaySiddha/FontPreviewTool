@@ -7,7 +7,6 @@ import subprocess
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from accounts.firebase_utils import get_firestore_data, set_firestore_data, update_firestore_data, delete_firestore_data 
 
 
 @csrf_exempt
