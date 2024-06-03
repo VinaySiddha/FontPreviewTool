@@ -97,5 +97,17 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+
+# settings.py
+
+COMPILER_API_URL = 'https://api.jdoodle.com/v1/execute'
+COMPILER_API_KEY = '1a1caf708cc5cc29c28c156d88e482b0'
+
+PROBLEM_API_URL = 'https://28fa7403.problems.sphere-engine.com/api/v4'
+PROBLEM_API_KEY = '4d22d7088552e3ff458f3706e345c533'
+
+CONTAINER_API_URL = 'https://28fa7403.containers.sphere-engine.com/api/v1'
+CONTAINER_API_KEY = '8fbf6b64e8674edcafbf8484c629ac45'
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'

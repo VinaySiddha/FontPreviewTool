@@ -1,43 +1,57 @@
-**Trevon Project**
+**Welcome to [Platform Name]**
 ================
 
-**Overview**
------------
+[Platform Name] is a coding platform that allows users to write, run, and debug code in a variety of programming languages. The platform provides a range of features, including:
 
-This project is a Django-based application that utilizes MongoDB as its database. The project involves multiple apps, including `accounts` and `yasha`, which contain models, views, and templates for user authentication and profiling.
+* Code editing and debugging tools
+* Support for multiple programming languages
+* Integration with API services for compiler, problem, and container management
 
-**Changes**
-----------
+**Getting Started**
+---------------
 
-### User Model Refactoring
+To get started with [Platform Name], simply create an account and start coding! You can choose from a range of templates and examples to get started, or start from scratch.
 
-The `User` model in `accounts/models.py` has been refactored to inherit from `AbstractBaseUser` and `PermissionsMixin`, allowing for more flexibility in customizing the user model. A new `UserManager` class has been added to handle user creation and superuser creation.
-
-### MongoDB Connection Updates
-
-The `con.py` file has been updated to use the `mongodb+srv` protocol and enable TLS connections for secure communication with the MongoDB database.
-
-### Profile Model Addition
-
-A new `Profile` model has been added to `yasha/models.py`, which has a one-to-one relationship with the `AUTH_USER_MODEL`.
-
-**Installation**
---------------
-
-To install the project, follow these steps:
-
-1. Clone the repository: `git clone https://github.com/[username]/trevon.git`
-2. Install the required packages: `pip install -r requirements.txt`
-3. Configure the `settings.py` file to point to your MongoDB database
-4. Run the migrations: `python manage.py migrate`
-5. Start the development server: `python manage.py runserver`
-
-**Contributing**
---------------
-
-If you'd like to contribute to the project, please fork the repository and submit a pull request with your changes.
-
-**License**
+**Features**
 ---------
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+* **Code Editing**: Write and edit code in a range of programming languages, including Python, Java, and C++.
+* **Debugging**: Debug your code using our built-in debugging tools, including syntax highlighting and error reporting.
+* **API Integration**: Integrate your code with our API services for compiler, problem, and container management.
+* **Templates and Examples**: Get started quickly with our range of templates and examples.
+
+**API Services**
+-------------
+
+* **Compiler API**: Compile and run your code using our compiler API.
+* **Problem API**: Access a range of programming problems and challenges using our problem API.
+* **Container API**: Create and manage containers for your code using our container API.
+
+**Settings**
+---------
+
+* **COMPILER_API_URL**: The URL of the compiler API service.
+* **COMPILER_API_KEY**: The API key for the compiler API service.
+* **PROBLEM_API_URL**: The URL of the problem API service.
+* **PROBLEM_API_KEY**: The API key for the problem API service.
+* **CONTAINER_API_URL**: The URL of the container API service.
+* **CONTAINER_API_KEY**: The API key for the container API service.
+
+**Views**
+------
+
+* **Compile View**: Compile and run your code using our compile view.
+* **Problems View**: Access a range of programming problems and challenges using our problems view.
+* **Problem Detail View**: View detailed information about a specific problem using our problem detail view.
+* **Create Container View**: Create a new container for your code using our create container view.
+* **Container Detail View**: View detailed information about a specific container using our container detail view.
+
+** Contributing**
+------------
+
+If you'd like to contribute to [Platform Name], please fork the repository and submit a pull request with your changes.
+
+**License**
+-------
+
+[Platform Name] is licensed under the MIT License. See LICENSE for details.

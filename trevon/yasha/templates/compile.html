@@ -1,0 +1,28 @@
+<!-- templates/compile.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compile Code</title>
+</head>
+<body>
+    <h1>Compile Code</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="source_code">Source Code:</label><br>
+        <textarea name="source_code" rows="10" cols="50"></textarea><br>
+        <label for="language">Language:</label><br>
+        <select name="language">
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <!-- Add more languages as needed -->
+        </select><br>
+        <button type="submit">Compile</button>
+    </form>
+    <div id="result">
+        {% if result %}
+            <h2>Result:</h2>
+            <pre>{{ result }}</pre>
+        {% endif %}
+    </div>
+</body>
+</html>

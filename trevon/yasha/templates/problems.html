@@ -1,0 +1,15 @@
+<!-- templates/problems.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Problems</title>
+</head>
+<body>
+    <h1>Problems</h1>
+    <ul>
+        {% for problem in problems %}
+            <li><a href="{% url 'problem_detail' problem.id %}">{{ problem.title }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
