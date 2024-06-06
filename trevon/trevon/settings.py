@@ -65,12 +65,17 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'user',
         'CLIENT': {
-            'host': 'mongodb+srv://admin:root@yasha.iutjjwd.mongodb.net/test?retryWrites=true&w=majority',
-            'tls': True,
-            'tlsAllowInvalidCertificates': True  # If you are using self-signed certificates or need to bypass validation
+            'host': 'mongodb+srv://admin:root@yasha.iutjjwd.mongodb.net/?retryWrites=true&w=majority&appName=Yasha',
+            # 'tls': True,
+            'port': 27017,
+            'username': "admin",
+            'password': "root",
+            # 'authSource': 'admin',
+            # 'authMechanism': 'SCRAM-SHA-1',
+            # 'tlsAllowInvalidCertificates': True  # If you are using self-signed certificates or need to bypass validation
         }
     }
-}
+}   
 
 
 
