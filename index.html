@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Preview Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #000000;
+        }
+
+        header {
+            background: #000000;
+            color: #ffffff;
+            padding: 20px 0;
+            border-bottom: 2px solid #000000;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.7;
+        }
+
+        nav a.active {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .about-content {
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .about-content ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .about-content li {
+            margin-bottom: 12px;
+            color: #333333;
+        }
+
+        .about-content strong {
+            color: #000000;
+        }
+
+        .upload-section {
+            border: 2px solid #000000;
+            border-radius: 4px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: #ffffff;
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            background: #000000;
+            color: #ffffff;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .upload-btn:hover {
+            background: #333333;
+        }
+
+        .upload-hint {
+            margin-top: 16px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        .text-input-section {
+            margin-bottom: 40px;
+        }
+
+        .text-input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .text-input-section input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 2px solid #000000;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .text-input-section input:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        .font-previews {
+            display: grid;
+            gap: 30px;
+        }
+
+        .font-card {
+            border: 2px solid #000000;
+            border-radius: 4px;
+            padding: 30px;
+            background: #ffffff;
+        }
+
+        .font-name {
+            font-size: 13px;
+            color: #666666;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .font-preview {
+            font-size: 56px;
+            color: #000000;
+            margin-bottom: 24px;
+            word-wrap: break-word;
+            line-height: 1.2;
+        }
+
+        .copy-btn {
+            background: #000000;
+            color: #ffffff;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+        }
+
+        .copy-btn:hover {
+            background: #333333;
+        }
+
+        .copy-btn:disabled {
+            background: #666666;
+            cursor: not-allowed;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 30px;
+            padding: 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .status.success {
+            background: #f0f0f0;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .status.error {
+            background: #f0f0f0;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #000000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 30px 20px;
+            margin-top: 60px;
+            border-top: 2px solid #000000;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">Font Preview Tool</div>
+            <nav>
+                <a href="#home" class="nav-link active" onclick="showPage('home')">Home</a>
+                <a href="#about" class="nav-link" onclick="showPage('about')">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Home Page -->
+            <div id="homePage" class="page active">
+                <h1>Font Preview Tool</h1>
+
+                <div class="upload-section">
+                    <input type="file" id="fontFile" accept=".zip" />
+                    <label for="fontFile" class="upload-btn">Choose Font ZIP File</label>
+                    <p class="upload-hint">Upload a ZIP file containing font files (.ttf, .otf, .woff, .woff2)</p>
+                </div>
+
+                <div class="text-input-section">
+                    <label for="previewText">Preview Text</label>
+                    <input type="text" id="previewText" placeholder="Type your text here..." value="The quick brown fox jumps over the lazy dog" />
+                </div>
+
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading fonts...</p>
+                </div>
+
+                <div class="font-previews" id="fontPreviews"></div>
+
+                <div id="status"></div>
+            </div>
+
+            <!-- About Page -->
+            <div id="aboutPage" class="page">
+                <h1>About</h1>
+
+                <div class="about-content">
+                    <h2>How to Use</h2>
+
+                    <p>This tool allows you to preview and export font samples in high quality. Follow these simple steps:</p>
+
+                    <ol>
+                        <li>
+                            <strong>Prepare Your Fonts:</strong> Create a ZIP file containing all your font files. Supported formats include .ttf, .otf, .woff, and .woff2. You can include multiple font variants (Regular, Bold, Italic, etc.) in a single ZIP file.
+                        </li>
+
+                        <li>
+                            <strong>Upload the ZIP File:</strong> Click the "Choose Font ZIP File" button on the home page and select your prepared ZIP file. The tool will automatically extract and load all font variants.
+                        </li>
+
+                        <li>
+                            <strong>Enter Preview Text:</strong> Type or paste the text you want to preview in the "Preview Text" input field. The preview will update in real-time for all loaded fonts.
+                        </li>
+
+                        <li>
+                            <strong>View Previews:</strong> Scroll through the page to see your text rendered in each font variant. Each font is displayed in a separate card with its name clearly labeled.
+                        </li>
+
+                        <li>
+                            <strong>Copy as Image:</strong> Click the "Copy as Image" button below any preview to copy it to your clipboard in high quality (4x resolution). You can then paste it directly into your design software, documents, or presentations.
+                        </li>
+
+                        <li>
+                            <strong>Alternative Download:</strong> If clipboard copying is not supported by your browser, the tool will automatically download the preview as a PNG file instead.
+                        </li>
+                    </ol>
+
+                    <h2>Features</h2>
+
+                    <p><strong>High-Quality Export:</strong> All images are exported at 4x resolution with pure black text on white background for maximum clarity and quality.</p>
+
+                    <p><strong>Multiple Font Support:</strong> Load and preview as many font variants as you need simultaneously.</p>
+
+                    <p><strong>Real-Time Preview:</strong> See changes instantly as you type your preview text.</p>
+
+                    <p><strong>Browser Compatibility:</strong> Works on all modern browsers including Chrome, Firefox, Safari, and Edge.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Vinay Siddha. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let loadedFonts = [];
+
+        // Navigation
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            if (pageName === 'home') {
+                document.getElementById('homePage').classList.add('active');
+                document.querySelector('a[href="#home"]').classList.add('active');
+            } else if (pageName === 'about') {
+                document.getElementById('aboutPage').classList.add('active');
+                document.querySelector('a[href="#about"]').classList.add('active');
+            }
+        }
+
+        document.getElementById('fontFile').addEventListener('change', handleFileUpload);
+        document.getElementById('previewText').addEventListener('input', updatePreviews);
+
+        async function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const loading = document.querySelector('.loading');
+            const status = document.getElementById('status');
+            const previews = document.getElementById('fontPreviews');
+
+            loading.style.display = 'block';
+            previews.innerHTML = '';
+            status.innerHTML = '';
+            loadedFonts = [];
+
+            try {
+                const zip = await JSZip.loadAsync(file);
+                const fontExtensions = ['.ttf', '.otf', '.woff', '.woff2'];
+
+                for (const [filename, file] of Object.entries(zip.files)) {
+                    if (file.dir) continue;
+
+                    const ext = filename.toLowerCase().slice(filename.lastIndexOf('.'));
+                    if (!fontExtensions.includes(ext)) continue;
+
+                    const blob = await file.async('blob');
+                    const fontName = filename.split('/').pop().replace(/\.[^/.]+$/, '');
+
+                    const fontFace = new FontFace(fontName, `url(${URL.createObjectURL(blob)})`);
+                    await fontFace.load();
+                    document.fonts.add(fontFace);
+
+                    loadedFonts.push(fontName);
+                }
+
+                loading.style.display = 'none';
+
+                if (loadedFonts.length === 0) {
+                    showStatus('No font files found in ZIP', 'error');
+                    return;
+                }
+
+                showStatus(`Successfully loaded ${loadedFonts.length} font(s)`, 'success');
+                updatePreviews();
+
+            } catch (error) {
+                loading.style.display = 'none';
+                showStatus('Error loading fonts: ' + error.message, 'error');
+            }
+        }
+
+        function updatePreviews() {
+            const text = document.getElementById('previewText').value || 'Type something...';
+            const previews = document.getElementById('fontPreviews');
+
+            previews.innerHTML = '';
+
+            loadedFonts.forEach((fontName, index) => {
+                const card = document.createElement('div');
+                card.className = 'font-card';
+                card.innerHTML = `
+                    <div class="font-name">${fontName}</div>
+                    <div class="font-preview" id="preview-${index}" style="font-family: '${fontName}';">${text}</div>
+                    <button class="copy-btn" onclick="copyAsImage(${index}, '${fontName}')">Copy as Image</button>
+                `;
+                previews.appendChild(card);
+            });
+        }
+
+        async function copyAsImage(index, fontName) {
+            const element = document.getElementById(`preview-${index}`);
+            const btn = event.target;
+            const originalText = btn.textContent;
+
+            try {
+                btn.textContent = 'Copying...';
+                btn.disabled = true;
+
+                const canvas = await html2canvas(element, {
+                    backgroundColor: '#ffffff',
+                    scale: 4,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true
+                });
+
+                canvas.toBlob(async (blob) => {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({ 'image/png': blob })
+                        ]);
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                        }, 2000);
+                    } catch (err) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${fontName}-preview.png`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+
+                        btn.textContent = 'Downloaded!';
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                        }, 2000);
+                    }
+                }, 'image/png', 1.0);
+
+            } catch (error) {
+                showStatus('Error creating image: ' + error.message, 'error');
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            setTimeout(() => {
+                status.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
